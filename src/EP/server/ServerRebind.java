@@ -17,9 +17,14 @@ public class ServerRebind {
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
 
             IPartRepository partRepository = new PartRepository();
-            IPartRepository stub = (IPartRepository) UnicastRemoteObject.exportObject(partRepository, 0);
 
-            registry.rebind(args[0], stub);
+            registry.rebind(args[0], partRepository);
+            String[] names = registry.list();
+
+            for (String name : names){
+                System.out.println(name);
+            }
+
         } catch(Exception e) {
             System.out.println("Server failed to start!");
             e.printStackTrace();

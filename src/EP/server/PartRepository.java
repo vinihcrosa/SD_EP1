@@ -14,11 +14,11 @@ public class PartRepository extends UnicastRemoteObject implements IPartReposito
         this.parts = new ArrayList<Part>();
     }
 
-    public void addPart(Part part) {
+    public void addPart(Part part) throws RemoteException{
         this.parts.add((Part) part);
     }
 
-    public void removePart(Integer id) {
+    public void removePart(Integer id) throws RemoteException{
         for (Part part : this.parts) {
             if (part.getId().equals(id)) {
                 this.parts.remove(part);
@@ -27,7 +27,7 @@ public class PartRepository extends UnicastRemoteObject implements IPartReposito
         }
     }
 
-    public List<Part> getParts() {
+    public List<Part> getParts() throws RemoteException{
         return this.parts;
     }
 }
