@@ -9,12 +9,12 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class ServerRebind {
     public static void main(String[] args) throws RemoteException {
-        if(args.length != 1) {
-            System.out.println("Usage: java ServerRebind <serverName>");
+        if(args.length != 3) {
+            System.out.println("Usage: java ServerRebind <serverName> <serverHost> <serverPort>");
             return;
         }
         try {
-            Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+            Registry registry = LocateRegistry.getRegistry(args[1], Integer.parseInt(args[2]));
 
             IPartRepository partRepository = new PartRepository();
 
