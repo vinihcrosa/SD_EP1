@@ -56,6 +56,9 @@ public class Client {
                     case "listSubParts":
                         this.listSubParts();
                         break;
+                    case "help":
+                        this.help();
+                        break;
                     case "exit":
                         System.exit(0);
                         break;
@@ -63,10 +66,33 @@ public class Client {
                         System.out.println("Comando invalido");
                         break;
                 }
+
+                this.endCommand();
             }
         } catch (Exception e) {
             System.out.println("Client failed to start!");
         }
+    }
+
+    private void endCommand() {
+        int quantidade = 10; // Número de caracteres "-" a serem impressos
+
+        for (int i = 0; i < quantidade; i++) {
+            System.out.print("-");
+        }
+
+        System.out.println(); // Pular linha após a impressão dos caracteres "-"
+    }
+
+    private void help() {
+        System.out.println();
+        System.out.println("Comandos disponiveis:");
+        System.out.println("bind - conecta ao repositorio");
+        System.out.println("listParts - lista as pecas do repositorio");
+        System.out.println("addSubPart - adiciona uma subpeca a lista de subpecas corrente");
+        System.out.println("listSubParts - lista as subpecas da peca corrente");
+        System.out.println("help - mostra os comandos disponiveis");
+        System.out.println("exit - sai do programa");
     }
 
     private void listSubParts() {
