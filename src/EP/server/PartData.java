@@ -1,12 +1,13 @@
 package EP.server;
 
-class PartData extends Part{
+public class PartData {
+    private Integer id;
     private Integer quantity;
     private String repositoryName;
-    public PartData(Integer quantity, Part part, String repositoryName) {
-        super(part.getId(), part.getName(), part.getDescription(), part.getSubParts());
+    public PartData(Integer id, Integer quantity, String repositoryName) {
         this.quantity = quantity;
         this.repositoryName = repositoryName;
+        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -23,5 +24,9 @@ class PartData extends Part{
 
     public void changeRepositoryName(String repositoryName){
         this.repositoryName = repositoryName;
+    }
+
+    public String toString() {
+        return "id:" + this.id + " - Repository name: " + this.repositoryName + " - Quantity: " + this.quantity;
     }
 }

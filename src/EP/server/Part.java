@@ -36,4 +36,8 @@ public class Part {
     public PartInventory getSubParts() {
         return subParts;
     }
+
+    public String toString() {
+        return "Part: id:" + this.id + this.name + " - " + this.description;
+    }
 }
