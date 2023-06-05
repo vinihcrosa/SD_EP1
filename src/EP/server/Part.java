@@ -1,6 +1,8 @@
 package EP.server;
 
-public class Part {
+import java.io.Serializable;
+
+public class Part implements Serializable{
     private Integer id;
     private String name;
     private String description;
@@ -38,6 +40,6 @@ public class Part {
     }
 
     public String toString() {
-        return "Part: id:" + this.id + this.name + " - " + this.description;
+        return "Part: id: " + this.id + " " + this.name + " - " + this.description;
     }
 }

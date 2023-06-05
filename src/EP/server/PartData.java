@@ -1,6 +1,6 @@
 package EP.server;
 
-public class PartData {
+public class PartData implements java.io.Serializable{
     private Integer id;
     private Integer quantity;
     private String repositoryName;

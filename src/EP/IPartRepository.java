@@ -10,4 +10,5 @@ public interface IPartRepository extends Remote {
     void addPart(Part part) throws RemoteException;
     void removePart(Integer id) throws RemoteException;
     List<Part> getParts() throws RemoteException;
+    Part getPartById(Integer id) throws RemoteException;
 }

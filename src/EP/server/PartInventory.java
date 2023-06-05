@@ -3,8 +3,8 @@ package EP.server;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PartInventory {
-    private List<PartData> subParts;
+public class PartInventory implements java.io.Serializable{
+    private ArrayList<PartData> subParts;
 
     public PartInventory() {
         this.subParts = new ArrayList<PartData>();
@@ -18,7 +18,7 @@ public class PartInventory {
         return this.subParts.size();
     }
 
-    public List<PartData> getSubParts() {
+    public ArrayList<PartData> getSubParts() {
         return this.subParts;
     }
 }

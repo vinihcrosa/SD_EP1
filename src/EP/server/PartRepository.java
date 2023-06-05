@@ -30,4 +30,13 @@ public class PartRepository extends UnicastRemoteObject implements IPartReposito
     public List<Part> getParts() throws RemoteException{
         return this.parts;
     }
+
+    public Part getPartById(Integer id) throws RemoteException{
+        for (Part part : this.parts) {
+            if (part.getId().equals(id)) {
+                return part;
+            }
+        }
+        return null;
+    }
 }

@@ -35,17 +35,18 @@ public class Client {
                 System.out.println("Enter command: ");
                 String command = scanner.nextLine();
 
-                /*
-                 * Comandos a serem implementados:
-                 * showP - mostra uma peca do repositorio atual
-                 * clear - limpa a lista de subpecas corrente
-                 * addSubPart - adiciona uma subpeca a lista de subpecas corrente
-                 * addP - adiciona uma peca ao repositorio atual
-                 */
-
                 switch (command) {
                     case "bind":
                         this.setRegistry();
+                        break;
+                    case "showP":
+                        this.showP();
+                        break;
+                    case "clear":
+                        this.clear();
+                        break;
+                    case "addP":
+                        this.addP();
                         break;
                     case "listParts":
                         this.listParts();
@@ -71,6 +72,7 @@ public class Client {
             }
         } catch (Exception e) {
             System.out.println("Client failed to start!");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -88,20 +90,32 @@ public class Client {
         System.out.println();
         System.out.println("Comandos disponiveis:");
         System.out.println("bind - conecta ao repositorio");
+        System.out.println("showP - seta a peca corrente e mostra seus dados");
         System.out.println("listParts - lista as pecas do repositorio");
+        System.out.println("addP - adiciona uma peca ao repositorio atual");
+        System.out.println("clear - limpa a lista de subpecas corrente");
         System.out.println("addSubPart - adiciona uma subpeca a lista de subpecas corrente");
         System.out.println("listSubParts - lista as subpecas da peca corrente");
         System.out.println("help - mostra os comandos disponiveis");
         System.out.println("exit - sai do programa");
+        System.out.println("listCurrentSubParts - lista as subpecas da lista de subpeças corrente");
     }
 
-    private void listSubParts() {
-        System.out.println("Subparts:");
-        if(this.subParts.getSubPartsCount() == 0) {
-            System.out.println("Nenhuma subpart adicionada ainda!");
-        }
-        for(PartData subpart : this.subParts.getSubParts()) {
-            System.out.println(subpart.toString());
+    protected void listSubParts() {
+        try {
+            System.out.println("Subparts:");
+            System.out.println(this.subParts.getSubPartsCount());
+            if(this.subParts.getSubPartsCount() == 0) {
+                System.out.println("Nenhuma subpart adicionada ainda!");
+                return;
+            }
+            System.out.println(this.subParts.toString());
+            for(PartData subpart : this.subParts.getSubParts()) {
+                System.out.println(subpart.toString());
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to list subparts!");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -125,6 +139,23 @@ public class Client {
         }
     }
 
+    protected void showP() {
+        System.out.println("Qual o id da peça? ");
+        Integer partId = Integer.parseInt(scanner.nextLine());
+        try {
+            this.currentPart = this.partRepository.getPartById(partId);
+        } catch (Exception e) {
+            System.out.println("Failed to get part!");
+        }
+
+        if (this.currentPart == null) {
+            System.out.println("Part not found!");
+        } else {
+            this.subParts = this.currentPart.getSubParts();
+            System.out.println(this.currentPart.toString());
+        }
+    }
+
     protected void listParts() throws RemoteException {
         System.out.println("Parts:");
 
@@ -137,9 +168,63 @@ public class Client {
         }
     }
 
+    protected void clear() {
+        this.subParts = new PartInventory();
+    }
+
+    protected void addP() {
+        System.out.println("Qual o id da peça? ");
+        Integer partId = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("Qual o nome da peça? ");
+        String partName = scanner.nextLine();
+
+        System.out.println("Qual a descrição da peça? ");
+        String partDescription = scanner.nextLine();
+
+        System.out.println("Deseja utilizar o repositório de subParts corrente? S / N");
+        String useSubParts = scanner.nextLine();
+
+        PartInventory subPartsNew = null;
+
+        if (useSubParts.equals("S")) {
+            subPartsNew = this.subParts;
+        } else {
+            this.clear();
+            System.out.println("Quantas subpeças deseja adicionar? ");
+            Integer subPartsCount = Integer.parseInt(scanner.nextLine());
+
+            for (int i = 0; i < subPartsCount; i++) {
+                System.out.println("Adicionando subpeça " + (i + 1) + " de " + subPartsCount + ":\n");
+                this.addSubPart();
+            }
+        }
+
+        
+        try {
+            Part tempPart = new Part(partId, partName, partDescription, subPartsNew);
+            Part existingPart = this.partRepository.getPartById(partId);
+
+            if (existingPart != null) {
+                System.out.println("Part already exists!");
+                this.currentPart = existingPart;
+                this.showP();
+                return;
+            }
+
+            this.partRepository.addPart(tempPart);
+            System.out.println(tempPart.toString() + " added!");
+            this.currentPart = tempPart;
+            return;
+        } catch (Exception e) {
+            System.out.println("Failed to add part!");
+            System.out.println(e.getMessage());
+        }
+    }
+
     protected void addSubPart() {
         try {
-            System.out.println("Qual o id da peça? ");
+            System.out.println("Qual o id da subpeça? ");
             Integer subPartId = Integer.parseInt(scanner.nextLine());
 
             System.out.println("Quantas peças deseja adicionar? ");
