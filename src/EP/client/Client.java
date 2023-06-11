@@ -74,8 +74,8 @@ public class Client {
                 this.endCommand();
             }
         } catch (Exception e) {
-            System.out.println("Client failed to start!");
-            System.out.println(e.getMessage());
+            System.out.println("Erro no client! Por favor rode novamente");
+            System.out.println(e);
         }
     }
 
@@ -130,7 +130,17 @@ public class Client {
     }
 
     protected void clear() {
-        this.subParts = new PartInventory();
+        if(this.currentPart == null) {
+            System.out.println("Voce nao setou uma part concorrente! Use o comando getp para isso");
+            return;
+        }
+
+        try{
+            this.subParts = new PartInventory();
+            System.out.println("A list de subparts da peca " + this.currentPart.getId() + " foi esvaziada com sucesso!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     protected void addSubPart() {
@@ -147,6 +157,7 @@ public class Client {
             this.subParts.addSubPart(subPartId, subPartQuantity, subPartRepositoryName);
         } catch (Exception e) {
             System.out.println("Failed to add subpart!");
+            System.out.println(e);
         }
     }
 
@@ -165,7 +176,7 @@ public class Client {
 
         PartInventory subPartsNew = null;
 
-        if (useSubParts.equals("S")) {
+        if (useSubParts.equals("S") || useSubParts.equals("s")) {
             subPartsNew = this.subParts;
         } else {
             this.clear();
@@ -196,7 +207,7 @@ public class Client {
             return;
         } catch (Exception e) {
             System.out.println("Failed to add part!");
-            System.out.println(e.getMessage());
+            System.out.println(e);
         }
     }
 
@@ -214,7 +225,7 @@ public class Client {
             }
         } catch (Exception e) {
             System.out.println("Failed to list subparts!");
-            System.out.println(e.getMessage());
+            System.out.println(e);
         }
     }
 
