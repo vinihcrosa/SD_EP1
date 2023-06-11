@@ -3,6 +3,7 @@ package EP.client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -131,7 +132,7 @@ public class Client {
 
     protected void clear() {
         if(this.currentPart == null) {
-            System.out.println("Voce nao setou uma part concorrente! Use o comando getp para isso");
+            System.out.println("Voce nao setou uma part corrente! Use o comando getp para isso");
             return;
         }
 
@@ -144,6 +145,9 @@ public class Client {
     }
 
     protected void addSubPart() {
+        if (this.subParts == null) {
+            this.subParts = new PartInventory();
+        }
         try {
             System.out.println("Qual o id da subpeça? ");
             Integer subPartId = Integer.parseInt(scanner.nextLine());
@@ -179,7 +183,7 @@ public class Client {
         if (useSubParts.equals("S") || useSubParts.equals("s")) {
             subPartsNew = this.subParts;
         } else {
-            this.clear();
+            this.subParts = new PartInventory();
             System.out.println("Quantas subpeças deseja adicionar? ");
             Integer subPartsCount = Integer.parseInt(scanner.nextLine());
 
@@ -187,6 +191,7 @@ public class Client {
                 System.out.println("Adicionando subpeça " + (i + 1) + " de " + subPartsCount + ":\n");
                 this.addSubPart();
             }
+            subPartsNew = this.subParts;
         }
 
         
@@ -203,6 +208,13 @@ public class Client {
 
             this.partRepository.addPart(tempPart);
             System.out.println(tempPart.toString() + " added!");
+            System.out.println("Subparts:");
+            if (tempPart.getSubParts() != null) {
+                ArrayList<PartData> subParts = tempPart.getSubParts().getSubParts();
+                for (PartData subpart : subParts) {
+                    System.out.println(subpart.toString() + " added!");
+                }
+            }
             this.currentPart = tempPart;
             return;
         } catch (Exception e) {
@@ -214,7 +226,11 @@ public class Client {
     protected void listSubParts() {
         try {
             System.out.println("Subparts:");
-            System.out.println(this.subParts.getSubPartsCount());
+            if (currentPart.getSubParts() == null) {
+                System.out.println("Nenhuma subpart adicionada!");
+                return;
+            }
+            System.out.println(currentPart.getSubParts().getSubPartsCount());
             if(this.subParts.getSubPartsCount() == 0) {
                 System.out.println("Nenhuma subpart adicionada ainda!");
                 return;
@@ -225,7 +241,7 @@ public class Client {
             }
         } catch (Exception e) {
             System.out.println("Failed to list subparts!");
-            System.out.println(e);
+            System.out.println(e.getStackTrace());
         }
     }
 
